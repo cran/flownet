@@ -12,7 +12,7 @@
 
 <meta name="author" content="Sebastian Krantz" />
 
-<meta name="date" content="2026-01-24" />
+<meta name="date" content="2026-02-01" />
 
 <title>Introduction to flownet</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to flownet</h1>
 <h4 class="author">Sebastian Krantz</h4>
-<h4 class="date">2026-01-24</h4>
+<h4 class="date">2026-02-01</h4>
 
 
 <div id="TOC">
@@ -349,63 +349,15 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><a href="#introduction" id="toc-introduction">Introduction</a></li>
 <li><a href="#getting-started" id="toc-getting-started">Getting
 Started</a></li>
-<li><a href="#basic-workflow-example" id="toc-basic-workflow-example">Basic Workflow Example</a>
-<ul>
-<li><a href="#step-1-visualize-the-network" id="toc-step-1-visualize-the-network">Step 1: Visualize the
-Network</a></li>
-<li><a href="#step-2-convert-network-to-graph" id="toc-step-2-convert-network-to-graph">Step 2: Convert Network to
-Graph</a></li>
-<li><a href="#step-3-extract-nodes-and-map-cities" id="toc-step-3-extract-nodes-and-map-cities">Step 3: Extract Nodes and
-Map Cities</a></li>
-<li><a href="#step-4-create-od-matrix" id="toc-step-4-create-od-matrix">Step 4: Create OD Matrix</a></li>
-<li><a href="#step-5-run-traffic-assignment" id="toc-step-5-run-traffic-assignment">Step 5: Run Traffic
-Assignment</a></li>
-<li><a href="#step-6-visualize-results" id="toc-step-6-visualize-results">Step 6: Visualize Results</a></li>
-</ul></li>
+<li><a href="#basic-workflow-example" id="toc-basic-workflow-example">Basic Workflow Example</a></li>
 <li><a href="#advanced-workflow-trade-flow-disaggregation" id="toc-advanced-workflow-trade-flow-disaggregation">Advanced Workflow:
-Trade Flow Disaggregation</a>
-<ul>
-<li><a href="#step-1-compute-city-population-shares" id="toc-step-1-compute-city-population-shares">Step 1: Compute City
-Population Shares</a></li>
-<li><a href="#step-2-disaggregate-trade-flows" id="toc-step-2-disaggregate-trade-flows">Step 2: Disaggregate Trade
-Flows</a></li>
-<li><a href="#step-3-run-assignment-with-trade-flows" id="toc-step-3-run-assignment-with-trade-flows">Step 3: Run Assignment
-with Trade Flows</a></li>
-</ul></li>
+Trade Flow Disaggregation</a></li>
 <li><a href="#advanced-workflow-with-network-consolidation" id="toc-advanced-workflow-with-network-consolidation">Advanced Workflow
-with Network Consolidation</a>
-<ul>
-<li><a href="#using-raw-segments" id="toc-using-raw-segments">Using Raw
-Segments</a></li>
-<li><a href="#consolidate-graph" id="toc-consolidate-graph">Consolidate
-Graph</a></li>
-<li><a href="#compare-original-vs-consolidated-network" id="toc-compare-original-vs-consolidated-network">Compare Original vs
-Consolidated Network</a></li>
-</ul></li>
+with Network Consolidation</a></li>
 <li><a href="#network-simplification-with-simplify_network" id="toc-network-simplification-with-simplify_network">Network
-Simplification with <code>simplify_network()</code></a>
-<ul>
-<li><a href="#shortest-paths-method" id="toc-shortest-paths-method">Shortest-Paths Method</a></li>
-<li><a href="#cluster-method" id="toc-cluster-method">Cluster
-Method</a></li>
-</ul></li>
-<li><a href="#key-concepts-and-functions" id="toc-key-concepts-and-functions">Key Concepts and Functions</a>
-<ul>
-<li><a href="#path-sized-logit-model" id="toc-path-sized-logit-model">Path-Sized Logit Model</a></li>
-<li><a href="#network-processing-functions" id="toc-network-processing-functions">Network Processing
-Functions</a></li>
-<li><a href="#graph-utilities" id="toc-graph-utilities">Graph
-Utilities</a></li>
-<li><a href="#od-matrix-utilities" id="toc-od-matrix-utilities">OD
-Matrix Utilities</a></li>
-<li><a href="#traffic-assignment" id="toc-traffic-assignment">Traffic
-Assignment</a></li>
-<li><a href="#parameter-tuning-tips" id="toc-parameter-tuning-tips">Parameter Tuning Tips</a></li>
-</ul></li>
-<li><a href="#conclusion" id="toc-conclusion">Conclusion</a>
-<ul>
-<li><a href="#next-steps" id="toc-next-steps">Next Steps</a></li>
-</ul></li>
+Simplification with <code>simplify_network()</code></a></li>
+<li><a href="#key-concepts-and-functions" id="toc-key-concepts-and-functions">Key Concepts and Functions</a></li>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
 <li><a href="#references" id="toc-references">References</a></li>
 </ul>
 </div>
@@ -842,24 +794,24 @@ for categorical attributes (columns), and supports weights.</p>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; Dropped 44 loop edges</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; Dropped 11 edges leading to singleton nodes</span></span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; Oriented 3431 undirected intermediate edges</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; Consolidated 5079 intermediate nodes</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; Contracted 5079 intermediate nodes</span></span>
 <span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt; Oriented 10 undirected intermediate edges</span></span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; Consolidated 10 intermediate nodes</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; Contracted 10 intermediate nodes</span></span>
 <span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; Aggregated 11330 edges down to 6597 edges</span></span>
 <span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; Oriented 361 undirected intermediate edges</span></span>
-<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; Consolidated 375 intermediate nodes</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; Contracted 375 intermediate nodes</span></span>
 <span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; Oriented 8 undirected intermediate edges</span></span>
-<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; Consolidated 8 intermediate nodes</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; Contracted 8 intermediate nodes</span></span>
 <span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt; Aggregated 6597 edges down to 6264 edges</span></span>
 <span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt; Oriented 41 undirected intermediate edges</span></span>
-<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt; Consolidated 43 intermediate nodes</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt; Contracted 43 intermediate nodes</span></span>
 <span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt; Oriented 1 undirected intermediate edges</span></span>
-<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt; Consolidated 1 intermediate nodes</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt; Contracted 1 intermediate nodes</span></span>
 <span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt; Aggregated 6264 edges down to 6224 edges</span></span>
 <span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#&gt; Oriented 2 undirected intermediate edges</span></span>
-<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt; Consolidated 3 intermediate nodes</span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt; Contracted 3 intermediate nodes</span></span>
 <span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a><span class="co">#&gt; Aggregated 6224 edges down to 6221 edges</span></span>
-<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="co">#&gt; No nodes to consolidate, returning graph</span></span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="co">#&gt; No nodes to contract, returning graph</span></span>
 <span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="co">#&gt; Consolidated undirected graph graph_seg from 11385 edges to 6221 edges (54.6%)</span></span>
 <span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="co">#&gt; Final node degrees:</span></span>

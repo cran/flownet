@@ -142,19 +142,21 @@ For more information about the PSL model consult some of the references below.
 \subsection{Route Enumeration Algorithm}{
 For each origin-destination pair, the algorithm identifies alternative routes as follows:
 \enumerate{
-  \item Compute the shortest path cost from origin to destination.
+  \item Compute the shortest path cost from origin to destination. If \code{sqrt(dmat.max.size) < N.nodes}, the entire shortest-path-distance matrix is precomputed.
   \item For each potential intermediate node, calculate the total cost of going
-        origin -> intermediate -> destination.
+        origin -> intermediate -> destination (also using the distance matrix).
   \item Keep only routes where total cost is within \code{detour.max} times the
         shortest path cost.
   \item If \code{angle.max} is specified, filter to intermediate nodes that lie
-        roughly in the direction of the destination (within the specified angle).
-  \item If \code{unique.cost = TRUE}, remove duplicate routes based on total cost.
+        roughly in the direction of the destination (within the specified angle - see further details below).  If \code{sqrt(dmat.max.size) < N.nodes} a geodesic-distance-matrix is precomputed for speedy calculations using the triangle equation.
+  \item If \code{unique.cost = TRUE}, remove duplicate routes based on total cost -
+        as multiple intermediate nodes may yield exactly the same route.
+  \item (Optionally) use \code{npaths.max} to sample the remaining routes if still too many.
   \item Compute the actual paths and filter out those with duplicate edges
         (where the intermediate node is approached and departed via the same edge).
 }
 This pre-selection using distance matrices speeds up route enumeration considerably
-by avoiding computation of implausible paths.
+by avoiding the computation of implausible paths.
 }
 
 \subsection{Coordinate-Based Filtering}{
@@ -246,20 +248,20 @@ plot(africa_net["trade_flows_psl_log10"], main = "Trade Flow Assignment (PSL)")
 }
 \references{
 Ben-Akiva, M., & Bierlaire, M. (1999). Discrete choice methods and their
-applications to short term travel decisions. In R. W. Hall (Ed.), *Handbook
-of Transportation Science* (pp. 5–33). Springer US. https://doi.org/10.1007/978-1-4615-5203-1_2
+applications to short term travel decisions. In R. W. Hall (Ed.), \emph{Handbook
+of Transportation Science} (pp. 5-33). Springer US. \doi{10.1007/978-1-4615-5203-1_2}
 
-Cascetta, E. (2001). *Transportation systems engineering: Theory and methods*.
+Cascetta, E. (2001). \emph{Transportation systems engineering: Theory and methods}.
 Springer.
 
-Ben-Akiva, M., & Lerman, S. R. (1985). *Discrete choice analysis: Theory and
-application to travel demand*. The MIT Press.
+Ben-Akiva, M., & Lerman, S. R. (1985). \emph{Discrete choice analysis: Theory and
+application to travel demand}. The MIT Press.
 
-Ramming, M. S. (2002). *Network knowledge and route choice* (Doctoral
+Ramming, M. S. (2002). \emph{Network knowledge and route choice} (Doctoral
 dissertation). Massachusetts Institute of Technology.
 
 Prato, C. G. (2009). Route choice modeling: Past, present and future research
-directions. *Journal of Choice Modelling, 2*(1), 65–100. https://doi.org/10.1016/S1755-5345(13)70005-8
+directions. \emph{Journal of Choice Modelling, 2}(1), 65-100. \doi{10.1016/S1755-5345(13)70005-8}
 
 AequilibiaE Python Documentation: https://www.aequilibrae.com/develop/python/route_choice/path_size_logit.html
 }

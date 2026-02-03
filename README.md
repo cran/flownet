@@ -1,9 +1,15 @@
-# flownet
+# flownet <img src='man/figures/logo.png' width="150px" align="right" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/SebKrantz/flownet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SebKrantz/flownet/actions/workflows/R-CMD-check.yaml)
 [![r-universe](https://sebkrantz.r-universe.dev/badges/flownet)](https://sebkrantz.r-universe.dev)
+[![CRAN status](https://www.r-pkg.org/badges/version/flownet)](https://cran.r-project.org/package=flownet) 
+[![cran checks](https://badges.cranchecks.info/worst/flownet.svg)](https://cran.r-project.org/web/checks/check_results_flownet.html)
+![downloads per month](https://cranlogs.r-pkg.org/badges/flownet?color=blue)
+![downloads](https://cranlogs.r-pkg.org/badges/grand-total/flownet?color=blue)
 [![Codecov test coverage](https://codecov.io/gh/SebKrantz/flownet/graph/badge.svg)](https://app.codecov.io/gh/SebKrantz/flownet)
+[![minimal R version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
+[![dependencies](https://tinyverse.netlify.app/badge/flownet)](https://CRAN.R-project.org/package=flownet)
 <!-- badges: end -->
 
 **Transport Modeling: Network Processing, Route Enumeration, and Traffic Assignment**
@@ -13,7 +19,7 @@
 ### Key Features
 
 - **Path-Sized Logit Model**: Stochastic traffic assignment accounting for route overlap
-- **Network Processing**: Convert LINESTRINGs to network graphs and consolidate/contract/simplify them
+- **Network Processing**: Convert LINESTRINGs to network graphs and consolidate/simplify them
 - **Route Enumeration**: Efficient algorithm for finding alternative routes between origin-destination pairs
 - **High Performance**: [fastverse](https://fastverse.org/fastverse/) packages and custom C implementations for critical path operations
 - **Multithreading**: Asynchronous parallelism using [`mirai`](https://github.com/r-lib/mirai) for faster processing of large networks
@@ -21,11 +27,12 @@
 ## Installation
 
 ```r
-# Install from R-universe (recommended)
+# Install from CRAN
+install.packages("flownet")
+
+# Install development version from R-universe
 install.packages("flownet", repos = c("https://sebkrantz.r-universe.dev", getOption("repos")))
 
-# Or install development version from GitHub
-remotes::install_github("SebKrantz/flownet")
 ```
 
 ### Dependencies
