@@ -107,7 +107,7 @@ test_that("consolidate_graph by parameter preserves mode groups", {
   expect_true("mode" %in% names(result))
 })
 
-test_that("consolidate_graph adds edge column", {
+test_that("consolidate_graph adds edge column only if present", {
   # Graph with branching (not just a chain)
   graph <- data.frame(
     from = c(1, 2, 2, 3, 4),
@@ -115,6 +115,12 @@ test_that("consolidate_graph adds edge column", {
     cost = c(1, 2, 3, 1, 1)
   )
 
+  result <- consolidate_graph(graph, keep.nodes = c(1, 5), verbose = FALSE)
+
+  expect_false("edge" %in% names(result))
+  expect_true(nrow(result) > 0)
+
+  graph$edge <- seq_len(nrow(graph))
   result <- consolidate_graph(graph, keep.nodes = c(1, 5), verbose = FALSE)
 
   expect_true("edge" %in% names(result))
@@ -151,7 +157,7 @@ test_that("simplify_network shortest-paths returns subset of edges", {
   # Simplify keeping paths between nodes 1 and 4
   result <- simplify_network(graph, nodes = c(1, 4),
                              method = "shortest-paths",
-                             cost.column = "cost")
+                             cost.column = "cost", verbose = FALSE)
 
   expect_lte(nrow(result), nrow(graph))
 })
@@ -165,7 +171,7 @@ test_that("simplify_network shortest-paths has edges attribute", {
 
   result <- simplify_network(graph, nodes = c(1, 4),
                              method = "shortest-paths",
-                             cost.column = "cost")
+                             cost.column = "cost", verbose = FALSE)
 
   expect_true(!is.null(attr(result, "edges")))
   expect_true(all(attr(result, "edges") <= nrow(graph)))
@@ -180,7 +186,7 @@ test_that("simplify_network shortest-paths has edge_counts attribute", {
 
   result <- simplify_network(graph, nodes = c(1, 4),
                              method = "shortest-paths",
-                             cost.column = "cost")
+                             cost.column = "cost", verbose = FALSE)
 
   edge_counts <- attr(result, "edge_counts")
   expect_true(!is.null(edge_counts))
@@ -197,7 +203,7 @@ test_that("simplify_network shortest-paths keeps shortest path edges", {
 
   result <- simplify_network(graph, nodes = c(1, 3),
                              method = "shortest-paths",
-                             cost.column = "cost")
+                             cost.column = "cost", verbose = FALSE)
 
   # Should keep edges 1->2 and 2->3, may or may not keep 1->3
   expect_gte(nrow(result), 2)
@@ -214,7 +220,7 @@ test_that("simplify_network shortest-paths with OD pairs data.frame", {
 
   result <- simplify_network(graph, nodes = od_pairs,
                              method = "shortest-paths",
-                             cost.column = "cost")
+                             cost.column = "cost", verbose = FALSE)
 
   expect_true(nrow(result) > 0)
 })
@@ -223,7 +229,7 @@ test_that("simplify_network errors on missing columns", {
   graph <- data.frame(from = 1:3, cost = 1:3)
 
   expect_error(
-    simplify_network(graph, nodes = c(1, 3), cost.column = "cost"),
+    simplify_network(graph, nodes = c(1, 3), cost.column = "cost", verbose = FALSE),
     "to"
   )
 })
@@ -236,7 +242,7 @@ test_that("simplify_network errors on unknown nodes", {
   )
 
   expect_error(
-    simplify_network(graph, nodes = c(1, 99), cost.column = "cost"),
+    simplify_network(graph, nodes = c(1, 99), cost.column = "cost", verbose = FALSE),
     "Unknown"
   )
 })
@@ -255,7 +261,7 @@ test_that("simplify_network cluster returns contracted graph", {
   result <- simplify_network(graph, nodes = keep_nodes,
                              method = "cluster",
                              cost.column = ".length",
-                             radius_km = list(nodes = 50, cluster = 100))
+                             radius_km = list(nodes = 50, cluster = 100), verbose = FALSE)
 
   # Should have fewer edges after clustering
   expect_lt(nrow(result), nrow(graph))
@@ -270,7 +276,7 @@ test_that("simplify_network cluster has no self-loops", {
   result <- simplify_network(graph, nodes = keep_nodes,
                              method = "cluster",
                              cost.column = ".length",
-                             radius_km = list(nodes = 50, cluster = 100))
+                             radius_km = list(nodes = 50, cluster = 100), verbose = FALSE)
 
   # No self-loops
   expect_false(any(result$from == result$to))
@@ -285,7 +291,7 @@ test_that("simplify_network cluster adds group attributes", {
   result <- simplify_network(graph, nodes = keep_nodes,
                              method = "cluster",
                              cost.column = ".length",
-                             radius_km = list(nodes = 50, cluster = 100))
+                             radius_km = list(nodes = 50, cluster = 100), verbose = FALSE)
 
   expect_true(!is.null(attr(result, "group.id")))
   expect_true(!is.null(attr(result, "group.starts")))
@@ -301,7 +307,7 @@ test_that("simplify_network cluster errors without coordinate columns", {
   expect_error(
     simplify_network(graph, nodes = c(1, 3),
                      method = "cluster",
-                     cost.column = "cost"),
+                     cost.column = "cost", verbose = FALSE),
     "FX.*FY.*TX.*TY"
   )
 })

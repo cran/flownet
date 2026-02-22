@@ -6,12 +6,13 @@
 \usage{
 simplify_network(
   graph_df,
-  nodes,
+  nodes = NULL,
   method = c("shortest-paths", "cluster"),
   directed = FALSE,
   cost.column = "cost",
   by = NULL,
   radius_km = list(nodes = 7, cluster = 20),
+  verbose = TRUE,
   ...
 )
 }
@@ -22,7 +23,7 @@ representing node coordinates.}
 
 \item{nodes}{For \code{method = "shortest-paths"}: either an atomic vector of node IDs, or a
 data.frame with columns \code{from} and \code{to} specifying origin-destination pairs.
-For \code{method = "cluster"}: an atomic vector of node IDs to preserve. These nodes will
+For \code{method = "cluster"}: an (optional) atomic vector of node IDs to preserve. These nodes will
 be kept as cluster centroids, and nearby nodes (within \code{radius_km$nodes}) will be
 assigned to their clusters. Remaining nodes are clustered using \code{\link[leaderCluster]{leaderCluster}}.}
 
@@ -52,6 +53,8 @@ Only used for \code{method = "cluster"}.
 \code{nodes}: radius in kilometers around preserved nodes. Graph nodes within this radius
 will be assigned to the nearest preserved node's cluster.
 \code{cluster}: radius in kilometers for clustering remaining nodes using leaderCluster.}
+
+\item{verbose}{Logical (default: TRUE). Whether to print progress messages/bars.}
 
 \item{\dots}{For \code{method = "cluster"}: additional arguments passed to
 \code{\link[collapse]{collap}} for edge attribute aggregation.}

@@ -38,8 +38,8 @@ tm_shape(africa_net) +
 tm_layout(frame = FALSE)
 
 ## ----convert-to-graph---------------------------------------------------------
-# Convert to graph (use atomic_elem to drop sf geometry, qDF for data.frame)
-graph <- atomic_elem(africa_net) |> qDF()
+# Convert to graph
+graph <- st_drop_geometry(africa_net)
 head(graph)
 
 ## ----extract-nodes------------------------------------------------------------
@@ -79,7 +79,7 @@ tm_layout(frame = FALSE)
 
 ## ----city-pop-shares----------------------------------------------------------
 # Compute each city's share of its country's population
-city_pop <- africa_cities_ports |> atomic_elem() |> qDF() |>
+city_pop <- st_drop_geometry(africa_cities_ports) |>
   fcompute(node = nearest_nodes,
            city = qF(city_country),
            pop_share = fsum(population, iso3, TRA = "/"),

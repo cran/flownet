@@ -11,9 +11,10 @@
  * @param paths1 List of integer vectors (edge numbers for first part of paths)
  * @param paths2 List of integer vectors (edge numbers for second part of paths)
  * @param delta_ks Integer vector used as hash table (must be large enough to index all edge numbers)
- * @return Logical vector of length length(paths1) with TRUE for no duplicates, FALSE if duplicates exist
+ * @param uniqe_edge_id Integer vector giving undirected edge ids. Needed for checking duplicates on directed graphs. NULL for undirected graphs
+ * @return Integer vector with indices of the paths without duplicate edges
  */
-SEXP check_path_duplicates(SEXP paths1, SEXP paths2, SEXP delta_ks) {
+SEXP check_path_duplicates(SEXP paths1, SEXP paths2, SEXP delta_ks, SEXP undir_edge_id) {
 
   int n_paths = length(paths2);
   if (length(paths1) < n_paths) {
@@ -22,7 +23,7 @@ SEXP check_path_duplicates(SEXP paths1, SEXP paths2, SEXP delta_ks) {
   if(n_paths == 0) return allocVector(INTSXP, 0);
 
   // Get pointer to delta_ks for direct indexing
-  int *delta_ptr = INTEGER(delta_ks);
+  int *delta_ptr = INTEGER(delta_ks)-1;
 
   // Allocate buffer for results
   int *buf = (int *) R_alloc(n_paths, sizeof(int)), j = 0;
@@ -32,30 +33,51 @@ SEXP check_path_duplicates(SEXP paths1, SEXP paths2, SEXP delta_ks) {
   const SEXP *paths2_ptr = SEXPPTR_RO(paths2);
 
   // Check inputs
-  for (int k = 0; k < n_paths; k++) {
-
-    int len1 = length(paths1_ptr[k]);
-    int len2 = length(paths2_ptr[k]);
-    double *path1_ptr = REAL(paths1_ptr[k]);
-    double *path2_ptr = REAL(paths2_ptr[k]);
-    int has_duplicate = 0;
-
-    // Check edges in path1
-    for (int i = 0; i < len1; i++) delta_ptr[(int)path1_ptr[i]] = 1; // Mark edge as seen
-
-    // check path2 for duplicates with path1
-    for (int i = 0; i < len2; i++) {
-        if (delta_ptr[(int)path2_ptr[i]]) {
-            has_duplicate = 1;
-            break; // Found duplicate
-        }
+  if(isNull(undir_edge_id)) {
+    for (int k = 0; k < n_paths; k++) {
+      int len1 = length(paths1_ptr[k]);
+      int len2 = length(paths2_ptr[k]);
+      double *path1_ptr = REAL(paths1_ptr[k]);
+      double *path2_ptr = REAL(paths2_ptr[k]);
+      int has_duplicate = 0;
+      // Check edges in path1
+      for (int i = 0; i < len1; i++) delta_ptr[(int)path1_ptr[i]] = 1; // Mark edge as seen
+      // check path2 for duplicates with path1
+      for (int i = 0; i < len2; i++) {
+          if (delta_ptr[(int)path2_ptr[i]]) {
+              has_duplicate = 1;
+              break; // Found duplicate
+          }
+      }
+      // Second pass: clear the hash table
+      for (int i = 0; i < len1; i++) delta_ptr[(int)path1_ptr[i]] = 0;
+      // Set result: TRUE if no duplicates, FALSE if duplicates
+      if(!has_duplicate) buf[j++] = k+1;
     }
-
-    // Second pass: clear the hash table
-    for (int i = 0; i < len1; i++) delta_ptr[(int)path1_ptr[i]] = 0;
-
-    // Set result: TRUE if no duplicates, FALSE if duplicates
-    if(!has_duplicate) buf[j++] = k+1;
+  } else {
+    if(length(undir_edge_id) != length(delta_ks)) error("Internal length mismatch between delta_ks and undir_edge_id. Please file an issue.");
+    // Get pointer to undir_edge_id for direct indexing
+    int *eid_ptr = INTEGER(undir_edge_id)-1;
+    for (int k = 0; k < n_paths; k++) {
+      int len1 = length(paths1_ptr[k]);
+      int len2 = length(paths2_ptr[k]);
+      double *path1_ptr = REAL(paths1_ptr[k]);
+      double *path2_ptr = REAL(paths2_ptr[k]);
+      int has_duplicate = 0;
+      // Check edges in path1
+      for (int i = 0; i < len1; i++) delta_ptr[eid_ptr[(int)path1_ptr[i]]] = 1; // Mark edge as seen
+      // check path2 for duplicates with path1
+      for (int i = 0; i < len2; i++) {
+        if (delta_ptr[eid_ptr[(int)path2_ptr[i]]]) {
+          has_duplicate = 1;
+          break; // Found duplicate
+        }
+      }
+      // Second pass: clear the hash table
+      for (int i = 0; i < len1; i++) delta_ptr[eid_ptr[(int)path1_ptr[i]]] = 0;
+      // Set result: TRUE if no duplicates, FALSE if duplicates
+      if(!has_duplicate) buf[j++] = k+1;
+    }
   }
 
   SEXP result = PROTECT(allocVector(INTSXP, j));
@@ -112,7 +134,6 @@ SEXP mark_edges_traversed(SEXP paths, SEXP edges_traversed) {
  * @param paths2      List of vectors; secondary part of alternative paths (double vectors of edge IDs)
  * @param shortest_path Numeric vector of edge IDs for the shortest path
  * @return            The modified delta_ks vector (as SEXP)
- */
 SEXP free_delta_ks(SEXP delta_ks, SEXP no_dups, SEXP paths1, SEXP paths2, SEXP shortest_path) {
   int n_no_dups = length(no_dups);
   const SEXP *paths1_ptr = SEXPPTR_RO(paths1);
@@ -120,7 +141,7 @@ SEXP free_delta_ks(SEXP delta_ks, SEXP no_dups, SEXP paths1, SEXP paths2, SEXP s
   int *no_dups_ptr = INTEGER(no_dups);
   double *shortest_path_ptr = REAL(shortest_path);
   int shortest_path_len = length(shortest_path);
-  int *delta_ptr = INTEGER(delta_ks);
+  int *delta_ptr = INTEGER(delta_ks)-1;
 
   // Zero out delta_ks entries for all edges in paths1 and paths2 for non-duplicate paths
   for (int idx = 0; idx < n_no_dups; idx++) {
@@ -138,6 +159,7 @@ SEXP free_delta_ks(SEXP delta_ks, SEXP no_dups, SEXP paths1, SEXP paths2, SEXP s
 
   return delta_ks;
 }
+ */
 
 // Assign to list inside mirai daemon
 SEXP set_vector_elt(SEXP x, SEXP i, SEXP elt) {
