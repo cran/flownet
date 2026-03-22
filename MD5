@@ -1,9 +1,9 @@
-eb7d8559f4dfac64b75e0946ac3e43d3 *DESCRIPTION
-13b7ca4a28255a12937ec4c79b5a5bd6 *NAMESPACE
-4c7946db8ba991698372ce681f9c6c29 *NEWS.md
-4fd5dfb696d6f1f17b71a6332866af21 *R/assignment.R
+5e259bfb2125737a80a2422c0562f1b3 *DESCRIPTION
+8f6e8e2a7f8e656c059986d3fcf7054f *NAMESPACE
+6fb2133ca8f6ce6bb2e6126689bb962b *NEWS.md
+2dc7184121d5f86dc57ad2971bbf0198 *R/assignment.R
 0905a35b9e571f153eaa9fa21c1415c4 *R/data.R
-cd0ac895dbdb1ff22cd17e3c2db1c8ca *R/utils.R
+c3ee45c8e1150b8fd4d7dec71c77acd9 *R/utils.R
 7e1f0a9403bcc53b75eb1bc7347f5183 *README.md
 4454e632feb75ce4f508807d50b3b12f *build/partial.rdb
 50e5951418a813e5d6584b145f6aa51f *build/vignette.rds
@@ -14,7 +14,7 @@ ed6a788ffcd74962e814a3dc353e524f *data/africa_trade.rda
 7c661e48d5052338debcd6e7c1e4f76d *inst/WORDLIST
 d8e096347f78eccb49438b06ec09d4b7 *inst/doc/introduction.R
 e5b885a15609155a4ad89f7d38e265ab *inst/doc/introduction.Rmd
-ec3967ab8af2979166f786c45d4c48bf *inst/doc/introduction.html
+b2b062ef37f978fad8f2afacaf598a6c *inst/doc/introduction.html
 9ca560b3930faa6dd139f4a36fb76f48 *man/africa_cities_ports.Rd
 c517539557bc34438a3efd3eb8e8a1ae *man/africa_network.Rd
 c68542f8e8c72e8d9a492885536617b9 *man/africa_segments.Rd

@@ -2,7 +2,7 @@ Package: flownet
 Type: Package
 Title: Transport Modeling: Network Processing, Route Enumeration, and
         Traffic Assignment
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(person("Sebastian", "Krantz", email = "sebastian.krantz@graduateinstitute.ch", role = c("aut", "cre")),
              person("Kamol", "Roy", role = "ctb"))
 Description: High-performance tools for transport modeling - network processing, route 
@@ -27,9 +27,9 @@ LazyData: true
 NeedsCompilation: yes
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
-Packaged: 2026-02-22 16:26:38 UTC; sebastiankrantz
+Packaged: 2026-03-22 04:48:35 UTC; sebastiankrantz
 Author: Sebastian Krantz [aut, cre],
   Kamol Roy [ctb]
 Maintainer: Sebastian Krantz <sebastian.krantz@graduateinstitute.ch>
 Repository: CRAN
-Date/Publication: 2026-02-22 23:00:32 UTC
+Date/Publication: 2026-03-22 05:40:02 UTC
