@@ -136,9 +136,20 @@ cat("Original segments:", nrow(graph_seg), "\n")
 
 ## ----consolidate-graph--------------------------------------------------------
 # Consolidate graph, preserving city nodes
-graph_cons <- consolidate_graph(graph_seg, keep = nearest_nodes_seg, w = ~ .length)
+graph_cons <- consolidate_graph(graph_seg, keep.nodes = nearest_nodes_seg, w = ~ .length)
 
 cat("After consolidation:", nrow(graph_cons), "\n")
+
+## ----consolidate-directed-----------------------------------------------------
+# Every segment as two reciprocal arcs (swapping nodes and coordinates)
+arcs_seg <- rowbind(graph_seg,
+  fmutate(graph_seg, from = graph_seg$to, to = graph_seg$from,
+          FX = graph_seg$TX, FY = graph_seg$TY, TX = graph_seg$FX, TY = graph_seg$FY))
+
+arcs_cons <- consolidate_graph(arcs_seg, directed = TRUE,
+                               keep.nodes = nearest_nodes_seg, w = ~ .length)
+
+cat("Directed arcs:", nrow(arcs_seg), "-> after consolidation:", nrow(arcs_cons), "\n")
 
 ## ----compare-networks---------------------------------------------------------
 tm_basemap("CartoDB.Positron", zoom = 4) +
